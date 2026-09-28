@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://devenramanuj.github.io/Gst-and-profitmatgin-calculator/sitemap.xml
