@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ઇન્સ્ટન્ટ GST અને પ્રોફિટ માર્જિન કેલ્ક્યુલેટર | GST Calculator Online</title>
+  <meta name="description" content="કોઈપણ પ્રોડક્ટની ખરીદ કિંમત, વેચાણ કિંમત, પ્રોફિટ માર્જિન અને GST (5%, 12%, 18%, 28%) ની ચોક્કસ ગણતરી કરો સેકન્ડોમાં. વેપારીઓ અને દુકાનદારો માટે ફ્રી ટૂલ.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "GST & Profit Margin Calculator",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "INR"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "GST સહિત (Inclusive) રકમમાંથી મૂળ કિંમત કેવી રીતે શોધવી?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "મૂળ કિંમત = કુલ રકમ × [100 / (100 + GST દર)]. દા.ત. ₹118 માં 18% GST શામેલ હોય તો મૂળ કિંમત ₹100 થાય."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "પ્રોફિટ માર્જિન અને માર્કઅપ વચ્ચે શું તફાવત છે?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "પ્રોફિટ માર્જિન વેચાણ કિંમત (Selling Price) પર ગણાય છે, જ્યારે માર્કઅપ ખરીદ કિંમત (Cost Price) પર ઉમેરવામાં આવે છે."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans min-h-screen flex flex-col justify-between">
+
+  <!-- Header -->
+  <header class="bg-indigo-700 text-white shadow-md">
+    <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <span class="text-2xl font-black tracking-tight">DevWeb</span>
+        <span class="text-xs bg-indigo-500 text-indigo-100 font-semibold px-2 py-0.5 rounded">Tools</span>
+      </div>
+      <span class="text-xs text-indigo-200">ફાસ્ટ & લાઇટવેઇટ કેલ્ક્યુલેટર</span>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto px-4 py-8 flex-grow w-full">
+    
+    <!-- Title Area -->
+    <div class="text-center mb-8">
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">ઇન્સ્ટન્ટ GST અને પ્રોફિટ માર્જિન કેલ્ક્યુલેટર</h1>
+      <p class="text-slate-600 mt-1 text-sm sm:text-base">ખરીદ કિંમત, મુનાફો અને GST સ્લેબ ઉમેરીને ચોક્કસ બિલિંગ કિંમત મેળવો</p>
+    </div>
+
+    <!-- Calculator Card -->
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden mb-12">
+      <div class="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Left: Inputs -->
+        <div class="space-y-5">
+          <!-- Cost Price -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1" for="costPrice">ખરીદ કિંમત (Cost Price - ₹)</label>
+            <input type="number" id="costPrice" placeholder="દા.ત. 1000" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-base" value="1000">
+          </div>
+
+          <!-- Profit Margin -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1" for="profitMargin">પ્રોફિટ માર્જિન (%)</label>
+            <input type="number" id="profitMargin" placeholder="દા.ત. 20" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-base" value="20">
+          </div>
+
+          <!-- GST Rate Selector -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">GST દર (%)</label>
+            <div class="grid grid-cols-4 gap-2">
+              <button type="button" class="gst-btn py-2 text-sm font-bold border rounded-lg transition-all" data-rate="5">5%</button>
+              <button type="button" class="gst-btn py-2 text-sm font-bold border rounded-lg transition-all" data-rate="12">12%</button>
+              <button type="button" class="gst-btn py-2 text-sm font-bold border rounded-lg bg-indigo-600 text-white border-indigo-600" data-rate="18">18%</button>
+              <button type="button" class="gst-btn py-2 text-sm font-bold border rounded-lg transition-all" data-rate="28">28%</button>
+            </div>
+            <input type="hidden" id="selectedGst" value="18">
+          </div>
+
+          <!-- GST Type Toggle -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">ગણતરીનો પ્રકાર</label>
+            <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl">
+              <button type="button" id="btnExclusive" class="py-2 text-xs sm:text-sm font-bold rounded-lg bg-white shadow text-slate-900 transition-all">GST સિવાય (Exclusive)</button>
+              <button type="button" id="btnInclusive" class="py-2 text-xs sm:text-sm font-semibold text-slate-600 rounded-lg hover:text-slate-900 transition-all">GST સહિત (Inclusive)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Results Panel -->
+        <div class="bg-slate-900 text-white p-6 rounded-xl flex flex-col justify-between shadow-inner">
+          <div class="space-y-3">
+            <h3 class="text-xs uppercase tracking-wider text-slate-400 font-bold">ગણતરીનું પરિણામ</h3>
+
+            <div class="flex justify-between items-center py-1 border-b border-slate-800 text-sm">
+              <span class="text-slate-400">મૂળ કિંમત (Base Price):</span>
+              <span class="font-semibold" id="resBasePrice">₹0.00</span>
+            </div>
+
+            <div class="flex justify-between items-center py-1 border-b border-slate-800 text-sm">
+              <span class="text-slate-400">પ્રોફિટ રકમ (Profit):</span>
+              <span class="font-semibold text-emerald-400" id="resProfit">₹0.00</span>
+            </div>
+
+            <div class="flex justify-between items-center py-1 border-b border-slate-800 text-sm">
+              <span class="text-slate-400">ટેક્સ પાત્ર રકમ (Taxable):</span>
+              <span class="font-semibold" id="resTaxable">₹0.00</span>
+            </div>
+
+            <div class="flex justify-between items-center py-1 border-b border-slate-800 text-sm">
+              <span class="text-slate-400">કુલ GST રકમ:</span>
+              <span class="font-semibold text-amber-400" id="resGst">₹0.00</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 pt-1 text-xs text-slate-400">
+              <div>CGST: <span id="resCgst" class="text-slate-200">₹0.00</span></div>
+              <div>SGST: <span id="resSgst" class="text-slate-200">₹0.00</span></div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-800">
+            <span class="block text-xs uppercase tracking-wider text-slate-400 font-bold mb-1">આખરી વેચાણ કિંમત (Final Amount)</span>
+            <div class="text-3xl sm:text-4xl font-black text-indigo-400 tracking-tight" id="resFinalAmount">₹0.00</div>
+            
+            <button id="copySummaryBtn" class="mt-4 w-full bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold py-2.5 rounded-lg border border-slate-700 transition flex items-center justify-center space-x-2">
+              <span id="copyText">સંપૂર્ણ હિસાબ કોપી કરો</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SEO Content & Formula Section -->
+    <article class="prose max-w-none text-slate-700 space-y-8 bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm">
+      <section>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 border-b pb-2">GST ની ગણતરી કેવી રીતે કરવી?</h2>
+        <p class="mt-3 text-sm sm:text-base leading-relaxed">
+          GST (Goods and Services Tax) મુખ્યત્વે બે પ્રકારે ગણાય છે: <strong>GST Exclusive (ટેક્સ સિવાય)</strong> અને <strong>GST Inclusive (ટેક્સ સહિત)</strong>.
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg">
+            <h4 class="font-bold text-slate-800 text-sm">૧. GST Exclusive ફોર્મ્યુલા</h4>
+            <p class="text-xs text-slate-600 mt-1">જ્યારે કિંમત પર અલગથી ટેક્સ જોડવાનો હોય:</p>
+            <div class="bg-white p-2 rounded border border-slate-200 font-mono text-xs mt-2 text-indigo-600 font-bold">
+              GST રકમ = (કિંમત × GST દર) / 100
+            </div>
+          </div>
+          
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg">
+            <h4 class="font-bold text-slate-800 text-sm">૨. GST Inclusive ફોર્મ્યુલા</h4>
+            <p class="text-xs text-slate-600 mt-1">જ્યારે કુલ રકમમાં ટેક્સ પહેલેથી સામેલ હોય:</p>
+            <div class="bg-white p-2 rounded border border-slate-200 font-mono text-xs mt-2 text-indigo-600 font-bold">
+              મૂળ કિંમત = કુલ રકમ × [100 / (100 + GST દર)]
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 border-b pb-2">વારંવાર પુછાતા પ્રશ્નો (FAQs)</h2>
+        <div class="space-y-4 mt-4">
+          <div>
+            <h3 class="font-semibold text-slate-900 text-sm sm:text-base">CGST અને SGST એટલે શું?</h3>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">
+              જ્યારે રાજ્યની અંદર વેચાણ થાય છે (Intra-state), ત્યારે લાગુ પડતો GST બે સરખા ભાગમાં વહેંચાય છે: અડધો હિસ્સો કેન્દ્ર સરકાર (CGST) ને જાય છે અને અડધો હિસ્સો રાજ્ય સરકાર (SGST) ને જાય છે.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-semibold text-slate-900 text-sm sm:text-base">વેપારમાં પ્રોફિટ માર્જિન કઈ રીતે ગણવો?</h3>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">
+              પ્રોફિટ માર્જિન હંમેશા વેચાણ કિંમતમાંથી ખરીદ કિંમત અને અન્ય ખર્ચાઓ બાદ કરીને ટકાવારીમાં માપવામાં આવે છે. ટેક્સ લગાવતા પહેલા પ્રોફિટ ઉમેરવો સૌથી ઉત્તમ બિઝનેસ પદ્ધતિ છે.
+            </p>
+          </div>
+        </div>
+      </section>
+    </article>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 text-center text-xs">
+    <div class="max-w-4xl mx-auto px-4">
+      <p>© 2026 DevWeb. સર્વ હક સુરક્ષિત. સુરક્ષિત અને ચોક્કસ વ્યવસાયિક ગણતરી માટે ઉપયોગી.</p>
+    </div>
+  </footer>
+
+  <!-- Script Logic -->
+  <script>
+    const costPriceInput = document.getElementById('costPrice');
+    const profitMarginInput = document.getElementById('profitMargin');
+    const selectedGstInput = document.getElementById('selectedGst');
+    const gstButtons = document.querySelectorAll('.gst-btn');
+    const btnExclusive = document.getElementById('btnExclusive');
+    const btnInclusive = document.getElementById('btnInclusive');
+    const copySummaryBtn = document.getElementById('copySummaryBtn');
+    const copyText = document.getElementById('copyText');
+
+    let isInclusive = false;
+
+    // GST Slab selection
+    gstButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        gstButtons.forEach(b => {
+          b.className = 'gst-btn py-2 text-sm font-bold border rounded-lg transition-all text-slate-700 border-slate-200 hover:bg-slate-100';
+        });
+        btn.className = 'gst-btn py-2 text-sm font-bold border rounded-lg bg-indigo-600 text-white border-indigo-600';
+        selectedGstInput.value = btn.getAttribute('data-rate');
+        calculate();
+      });
+    });
+
+    // Toggle Exclusive / Inclusive
+    btnExclusive.addEventListener('click', () => {
+      isInclusive = false;
+      btnExclusive.className = 'py-2 text-xs sm:text-sm font-bold rounded-lg bg-white shadow text-slate-900 transition-all';
+      btnInclusive.className = 'py-2 text-xs sm:text-sm font-semibold text-slate-600 rounded-lg hover:text-slate-900 transition-all';
+      calculate();
+    });
+
+    btnInclusive.addEventListener('click', () => {
+      isInclusive = true;
+      btnInclusive.className = 'py-2 text-xs sm:text-sm font-bold rounded-lg bg-white shadow text-slate-900 transition-all';
+      btnExclusive.className = 'py-2 text-xs sm:text-sm font-semibold text-slate-600 rounded-lg hover:text-slate-900 transition-all';
+      calculate();
+    });
+
+    // Inputs listener
+    costPriceInput.addEventListener('input', calculate);
+    profitMarginInput.addEventListener('input', calculate);
+
+    function calculate() {
+      const cost = parseFloat(costPriceInput.value) || 0;
+      const margin = parseFloat(profitMarginInput.value) || 0;
+      const gstRate = parseFloat(selectedGstInput.value) || 0;
+
+      let basePrice = cost;
+      let profit = (cost * margin) / 100;
+      let taxableAmount = basePrice + profit;
+      let gstAmount = 0;
+      let finalAmount = 0;
+
+      if (!isInclusive) {
+        // Exclusive: Add GST on top of taxable
+        gstAmount = (taxableAmount * gstRate) / 100;
+        finalAmount = taxableAmount + gstAmount;
+      } else {
+        // Inclusive: Taxable amount already contains GST
+        finalAmount = taxableAmount;
+        taxableAmount = (finalAmount * 100) / (100 + gstRate);
+        gstAmount = finalAmount - taxableAmount;
+      }
+
+      const halfGst = gstAmount / 2;
+
+      // Update UI
+      document.getElementById('resBasePrice').textContent = `₹${basePrice.toFixed(2)}`;
+      document.getElementById('resProfit').textContent = `₹${profit.toFixed(2)}`;
+      document.getElementById('resTaxable').textContent = `₹${taxableAmount.toFixed(2)}`;
+      document.getElementById('resGst').textContent = `₹${gstAmount.toFixed(2)}`;
+      document.getElementById('resCgst').textContent = `₹${halfGst.toFixed(2)}`;
+      document.getElementById('resSgst').textContent = `₹${halfGst.toFixed(2)}`;
+      document.getElementById('resFinalAmount').textContent = `₹${finalAmount.toFixed(2)}`;
+    }
+
+    // Copy Summary logic
+    copySummaryBtn.addEventListener('click', () => {
+      const summary = `--- DevWeb GST હિસાબ ---\n` +
+        `મૂળ ખરીદ કિંમત: ${document.getElementById('resBasePrice').textContent}\n` +
+        `નફો (પ્રોફિટ): ${document.getElementById('resProfit').textContent}\n` +
+        `ટેક્સપાત્ર રકમ: ${document.getElementById('resTaxable').textContent}\n` +
+        `GST (${selectedGstInput.value}%): ${document.getElementById('resGst').textContent}\n` +
+        `CGST: ${document.getElementById('resCgst').textContent} | SGST: ${document.getElementById('resSgst').textContent}\n` +
+        `કુલ વેચાણ રકમ: ${document.getElementById('resFinalAmount').textContent}`;
+
+      navigator.clipboard.writeText(summary).then(() => {
+        copyText.textContent = "કોપી થઈ ગયું! ✓";
+        setTimeout(() => {
+          copyText.textContent = "સંપૂર્ણ હિસાબ કોપી કરો";
+        }, 2000);
+      });
+    });
+
+    // Run on initial load
+    calculate();
+  </script>
+</body>
+</html>
