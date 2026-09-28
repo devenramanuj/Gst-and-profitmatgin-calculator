@@ -1,0 +1,21 @@
+{
+  "name": "DevWeb GST & Margin Calculator",
+  "short_name": "GST Calc",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4338ca",
+  "description": "ઝડપી અને સરળ GST તથા પ્રોફિટ માર્જિન કેલ્ક્યુલેટર.",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3135/3135706.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3135/3135706.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
